@@ -18,48 +18,6 @@ class FacialDetector:
         self.params = params
         self.best_model = None
 
-    def find_window_size(self):
-        if not os.path.exists(self.params.histograms_dir):
-            os.makedirs(self.params.histograms_dir)
-
-        for character_name in ['barney', 'betty', 'fred', 'wilma', 'unknown']:
-            print(f'Finding window size for {character_name}...')
-            positions = np.empty((0, 4))
-            for name in ['barney', 'betty', 'fred', 'wilma']:
-                annotations_file = os.path.join(self.params.base_dir, name + '_annotations.txt')
-                with open(annotations_file, 'r') as f:
-                    p = np.array([[int(value) for value in line.split()[1:-1]] for line in f if line.split()[-1] == character_name])
-                positions = np.concatenate((positions, p))
-            widths = positions[:,2] - positions[:,0]
-            heights = positions[:,3] - positions[:,1]
-
-            dimension_ratio = widths / heights
-            ratio_frequency = collections.Counter(dimension_ratio)
-            mean_ratio = np.mean(dimension_ratio)
-
-            height_frequency = collections.Counter(heights)
-            mean_height = np.mean(heights)
-
-            plt.bar(height_frequency.keys(), height_frequency.values())
-            plt.xlabel('Inaltimi')
-            plt.ylabel('Frecvență')
-            plt.title('Histograma Frecvenței Inaltimilor')
-            plt.axvline(mean_height, color='red', linestyle='dashed', linewidth=2, label=f'Medie: {mean_height}')
-            plt.legend()
-            plt.savefig(os.path.join(self.params.histograms_dir, character_name + '_histograma_inaltimilor.png'))
-            plt.show()
-            plt.clf()
-
-            plt.bar(ratio_frequency.keys(), ratio_frequency.values())
-            plt.xlabel('Raport lungime / înălțime')
-            plt.ylabel('Frecvență')
-            plt.title(f'Histograma Frecvență Raport lungime / înălțime {character_name}')
-            plt.axvline(mean_ratio, color='red', linestyle='dashed', linewidth=2, label=f'Medie: {mean_ratio:.2f}')
-            plt.legend()
-            plt.savefig(os.path.join(self.params.histograms_dir, character_name + '_histograma_ratio.png'))
-            plt.show()
-            plt.clf()
-
     def generate_positive_images(self):
         for name in ['barney', 'betty', 'fred', 'wilma', 'unknown']:
             faces_directory = os.path.join(self.params.faces_dir, name)
@@ -136,17 +94,14 @@ class FacialDetector:
                     last_image_name = image_name
                 self.find_negative_images(os.path.join(images_path, last_image_name), characters_positions)
 
-    def get_positive_descriptors(self):
+    def get_positive_descriptors(self, name):
         # in aceasta functie calculam descriptorii pozitivi
         # vom returna un numpy array de dimensiuni NXD
         # unde N - numar exemplelor pozitive
         # iar D - dimensiunea descriptorului
         # D = (params.dim_window/params.dim_hog_cell - 1) ^ 2 * params.dim_descriptor_cell (fetele sunt patrate)
-
-        files = []
-        for name in ['barney', 'betty', 'fred', 'wilma', 'unknown']:
-            images_path = os.path.join(self.params.faces_dir, name + '/*.jpg')
-            files += glob.glob(images_path)
+        images_path = os.path.join(self.params.faces_dir, name + '/*.jpg')
+        files = glob.glob(images_path)
         num_images = len(files)
         positive_descriptors = []
         for i in range(num_images):
@@ -158,7 +113,7 @@ class FacialDetector:
                 positive_descriptors.append(features)
 
         positive_descriptors = np.array(positive_descriptors)
-        return positive_descriptors[:4000]
+        return positive_descriptors
 
     def get_negative_descriptors(self):
         # in aceasta functie calculam descriptorii negativi

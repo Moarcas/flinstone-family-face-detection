@@ -3,7 +3,6 @@ from FacialDetector import *
 import pdb
 from Visualize import *
 
-
 params: Parameters = Parameters()
 params.overlap = 0.3
 params.number_positive_examples = 6713  # numarul exemplelor pozitive
@@ -38,28 +37,44 @@ print('Checking for positive descriptors file...')
 if not os.path.exists(params.descriptors_dir):
     os.makedirs(params.descriptors_dir)
 
-positive_features_file_name = os.path.join(params.descriptors_dir, 'positive_cellSize%d_blockSize%d.npy' % (params.dim_hog_cell[0], params.dim_block[0]))
-if os.path.exists(positive_features_file_name):
-    positive_features = np.load(positive_features_file_name)
-    print('Loaded descriptors for positive examples')
-else:
-    print('Descriptors for positive examples not found')
-    print('Generating descriptors for positive examples...')
-    positive_features = facial_detector.get_positive_descriptors()
-    np.save(positive_features_file_name, positive_features)
-    print('Saved descriptors for positive examples in %s file' % positive_features_file_name)
+positive_features = {
+    'barney': np.empty(0),
+    'betty': np.empty(0),
+    'fred': np.empty(0),
+    'wilma': np.empty(0),
+}
 
-print('Checking for negative descriptors file...')
-negative_features_file_name = os.path.join(params.descriptors_dir, 'negative_callSize%d_blockSize%d.npy' % (params.dim_hog_cell[0], params.dim_block[0]))
-if os.path.exists(negative_features_file_name):
-    negative_features = np.load(negative_features_file_name)
-    print('Loaded descriptors for negative examples')
-else:
-    print('Descriptors for negative examples not found')
-    print('Generating descriptors for negative examples...')
-    negative_features = facial_detector.get_negative_descriptors()
-    np.save(negative_features_file_name, negative_features)
-    print('Saved descriptors for negative examples in %s file' % negative_features_file_name)
+negative_features = {
+    'barney': np.empty(0),
+    'betty': np.empty(0),
+    'fred': np.empty(0),
+    'wilma': np.empty(0),
+}
+
+for name in ['barney', 'betty', 'fred', 'wilma']:
+    positive_features_file_name = os.path.join(params.descriptors_dir, '%s_positive_cellSize%d_blockSize%d.npy' % (name, params.dim_hog_cell[0], params.dim_block[0]))
+    if os.path.exists(positive_features_file_name):
+        positive_features[name] = np.load(positive_features_file_name)
+        print('Loaded descriptors for positive examples')
+    else:
+        print('Descriptors for positive examples not found')
+        print('Generating descriptors for positive examples...')
+        positive_features[name] = facial_detector.get_positive_descriptors()
+        np.save(positive_features_file_name, positive_features[name])
+        print('Saved descriptors for positive examples in %s file' % positive_features_file_name)
+
+for name in ['barney', 'betty', 'fred', 'wilma']:
+    print('Checking for negative descriptors file...')
+    negative_features_file_name = os.path.join(params.descriptors_dir, '%s_negative_callSize%d_blockSize%d.npy' % (name, params.dim_hog_cell[0], params.dim_block[0]))
+    if os.path.exists(negative_features_file_name):
+        negative_features[name] = np.load(negative_features_file_name)
+        print('Loaded descriptors for negative examples')
+    else:
+        print('Descriptors for negative examples not found')
+        print('Generating descriptors for negative examples...')
+        negative_features[name] = facial_detector.get_negative_descriptors()
+        np.save(negative_features_file_name, negative_features)
+        print('Saved descriptors for negative examples in %s file' % negative_features_file_name)
 
 if not os.path.exists(params.models_dir):
     os.makedirs(params.models_dir)

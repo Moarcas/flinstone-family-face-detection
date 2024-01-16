@@ -14,7 +14,7 @@ class Parameters:
         self.window_step = 20
         self.face_image_dimension = (50, 50)
         self.dim_window = [96, 150]
-        self.ratio_window = [0.85, 1, 1.15]
+        self.ratio_window = [1, 1.2]
         self.dim_hog_cell = (6, 6)
         self.dim_block = (4, 4)
         self.overlap = 0.3
