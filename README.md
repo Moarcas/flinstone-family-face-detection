@@ -1,25 +1,53 @@
-Your project should include a README file containing the following information:
+# Flintstone Family Facial Detection Project
 
-1. the libraries required to run the project including the full version of each library
+## Overview
 
-Example:
+This project utilizes Histogram of Oriented Gradients (HOG) descriptors and a Support Vector Machine (SVM) implemented through the LinearSVC class from scikit-learn to perform facial detection on images of the Flintstone Family. The README provides information on the required libraries and instructions for running the code.
 
-numpy==1.15.4
-opencv_python==4.1.1.26
-scikit_image==0.15.0
-tensorflow_gpu==1.12.0
-Pillow==7.0.0
-scikit_learn==0.22.1
-skimage==0.0
-tensorflow==2.1.0
+## Libraries Used
 
-2. how to run each task and where to look for the output file.
+- **numpy**: For numerical operations and array manipulation.
+- **scikit-learn**: Specifically, the LinearSVC class for implementing the SVM.
+- **matplotlib**: Used for plotting and visualization.
+- **glob**: To easily retrieve a list of file paths matching a specified pattern.
+- **cv2 (OpenCV)**: For image processing tasks.
+- **pdb**: Python Debugger for debugging purposes.
+- **pickle**: For serializing and deserializing Python objects.
+- **ntpath**: To handle file paths.
+- **copy**: Used for creating deep copies of objects.
+- **timeit**: To measure the execution time of code blocks.
+- **skimage.feature**: Provides the HOG feature extraction method.
+- **collections**: Used for specialized container data structures.
+- **scipy.ndimage**: Used for image rotation.
 
-Example:
+## Instructions for Running the Code
 
-Task 1: 
-script: task_1.py
-function: run_task1(input_folder_name), where input_folder_name is the path to the folder containing the images for task1
-output: the output file is results/task1.txt
+### 1. Setup Environment
 
-Task 2: ...
+Make sure you have Python installed on your system. You can install the required libraries using the following command:
+
+```bash
+pip install numpy scikit-learn matplotlib opencv-python scikit-image scipy
+```
+
+### 2. Clone the Repository
+
+Clone the Flintstone Family Facial Detection Project repository from GitHub:
+
+```bash
+git clone https://github.com/Moarcas/flintstone-family-face-detection
+```
+
+### 3. Go to the desired task folder
+```bash
+cd flinstone-family-face-detection/cod/task1
+```
+or 
+```bash
+cd flinstone-family-face-detection/cod/task2
+```
+
+### 3. Run the project
+```bash
+python3 RunProject.py
+
